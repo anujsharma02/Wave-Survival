@@ -2,15 +2,29 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private GameObject upgradePanel;
+
+    private void OnEnable()
     {
-        
+        EventManager.OnLevelChanged += OpenUpgradePanel;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        EventManager.OnLevelChanged -= OpenUpgradePanel;
+    }
+
+    private void OpenUpgradePanel(int level)
+    {
+        Time.timeScale = 0f;
+
+        upgradePanel.SetActive(true);
+    }
+
+    public void ClosePanel()
+    {
+        upgradePanel.SetActive(false);
+
+        Time.timeScale = 1f;
     }
 }

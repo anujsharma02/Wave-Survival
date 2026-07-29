@@ -1,21 +1,38 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager Instance { get; private set; }
-
+     [Header("Scene References")]
     public Transform PlayerTransform { get; private set; }
+    [SerializeField] private XPPool xpPool;
+    public XPPool XPPool => xpPool;
+    public PlayerStats PlayerStats { get; private set; }
+    public PlayerHealth PlayerHealth { get; private set; }
+    public LevelSystem LevelSystem { get; private set; }
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance != null)
+        base.Awake();
+
+        GameObject player = GameObject.FindGameObjectWithTag
+        ("Player");
+
+        if (player != null)
         {
-            Destroy(gameObject);
+            PlayerTransform = player.transform;
+        }
+        else
+        {
+            Debug.LogWarning("Player with tag 'Player' not found.");
             return;
         }
+        CachePlayerReferences();
+    }
 
-        Instance = this;
-
-        PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+    private void CachePlayerReferences()
+    {
+        PlayerStats = PlayerTransform.GetComponent<PlayerStats>();
+        PlayerHealth = PlayerTransform.GetComponent<PlayerHealth>();
+        LevelSystem = PlayerTransform.GetComponent<LevelSystem>();
     }
 }

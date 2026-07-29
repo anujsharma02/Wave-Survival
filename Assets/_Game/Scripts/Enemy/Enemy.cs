@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
 
     private float currentHealth;
 
+
     public void Initialize(EnemyData data)
     {
         Data = data;
@@ -22,7 +23,26 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            gameObject.SetActive(false);
+            Die();
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        PlayerHealth player = collision.gameObject.GetComponent<PlayerHealth>();
+
+        if (player == null)
+            return;
+
+        player.TakeDamage(Data.damage);
+    }
+
+    private void Die()
+    {
+        XPOrb orb = GameManager.Instance.XPPool.GetXP();
+
+        orb.transform.position = transform.position;
+
+        gameObject.SetActive(false);
     }
 }

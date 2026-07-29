@@ -1,16 +1,17 @@
 using UnityEngine;
 
-public class Singleton : MonoBehaviour
+public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public static T Instance { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Awake()
     {
-        
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this as T;
     }
 }

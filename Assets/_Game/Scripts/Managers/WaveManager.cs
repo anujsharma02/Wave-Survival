@@ -24,6 +24,7 @@ public class WaveManager : MonoBehaviour
     private void Update()
     {
         waveTimer -= Time.deltaTime;
+        EventManager.OnWaveTimerChanged?.Invoke(waveTimer);
 
         spawnTimer += Time.deltaTime;
 
