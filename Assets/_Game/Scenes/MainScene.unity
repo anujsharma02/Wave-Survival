@@ -586,6 +586,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad90c0f256085ea41bc0c5b987d89d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
+  enemyFactory: {fileID: 1718888706}
+  waves:
+  - {fileID: 11400000, guid: 67bfee9efa3ebf949b1065286e3cd2f1, type: 2}
+  - {fileID: 11400000, guid: db3fe543db7748f438d433bb424062d6, type: 2}
+  - {fileID: 11400000, guid: 71036f668ada5204ba9227cc60ecae6a, type: 2}
+  spawnRadius: 8
 --- !u!1 &803032005
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,7 +633,7 @@ GameObject:
   m_Component:
   - component: {fileID: 819362057}
   m_Layer: 0
-  m_Name: Enemies
+  m_Name: EnemieRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -939,6 +945,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2374b23c928cc40b9cd62098e5b97b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolManager
+  prefab: {fileID: 7875042223018263312, guid: dd8292b8317bd754788dcff59dc71917, type: 3}
+  initialPoolSize: 20
 --- !u!1 &1587206105
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,6 +987,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1718888705}
+  - component: {fileID: 1718888706}
   m_Layer: 0
   m_Name: EnemyFactory
   m_TagString: Untagged
@@ -1001,6 +1010,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1909383537}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1718888706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718888704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74632dd1d1d655846b69623183ebdd43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyFactory
+  poolManager: {fileID: 1571923313}
 --- !u!1 &1766244566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,9 +1178,9 @@ Transform:
   - {fileID: 1766244567}
   - {fileID: 590533993}
   - {fileID: 1571923312}
+  - {fileID: 1718888705}
   - {fileID: 1104949659}
   - {fileID: 1019483838}
-  - {fileID: 1718888705}
   m_Father: {fileID: 473729273}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2010874876

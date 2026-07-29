@@ -2,15 +2,37 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField]
+    private Enemy prefab;
+    [SerializeField] private int initialPoolSize = 20;
+
+    private readonly System.Collections.Generic.List<Enemy> pool = new();
+
+    private void Awake()
     {
-        
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            Enemy enemy = Instantiate(prefab, transform);
+            enemy.gameObject.SetActive(false);
+            pool.Add(enemy);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public Enemy GetEnemy()
     {
-        
+        foreach (Enemy enemy in pool)
+        {
+            if (!enemy.gameObject.activeInHierarchy)
+            {
+                enemy.gameObject.SetActive(true);
+                return enemy;
+            }
+        }
+
+        Enemy newEnemy = Instantiate(prefab, transform);
+        newEnemy.gameObject.SetActive(true);
+        pool.Add(newEnemy);
+
+        return newEnemy;
     }
 }

@@ -2,15 +2,27 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private SpriteRenderer spriteRenderer;
+
+    public EnemyData Data { get; private set; }
+
+    private float currentHealth;
+
+    public void Initialize(EnemyData data)
     {
-        
+        Data = data;
+        currentHealth = data.maxHealth;
+
+        spriteRenderer.color = data.enemyColor;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TakeDamage(float damage)
     {
-        
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
