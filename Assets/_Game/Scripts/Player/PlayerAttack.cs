@@ -1,73 +1,91 @@
 using UnityEngine;
+using WaveSurvival.Data;
+using WaveSurvival.Enemies;
+using WaveSurvival.Pool;
+using WaveSurvival.Managers;
+using WaveSurvival.Weapon;
 
-public class PlayerAttack : MonoBehaviour
+namespace WaveSurvival.Player
 {
-    [SerializeField]
-    private WeaponData[] ownedWeapons;
-    private int currentWeapon;
-    [SerializeField] private ProjectilePool projectilePool;
-    [SerializeField] private float attackRadius = 6f;
-    private PlayerStats playerStats;
-
-    private float timer;
-
-    private void Awake()
+/*
+ * Controls the player's attack system.
+ *
+ * Responsibilities:
+ * - Detects nearby enemies.
+ * - Attacks enemies automatically or manually.
+ * - Spawns projectiles or melee attacks.
+ * - Applies damage using equipped weapon.
+ */
+     public class PlayerAttack : MonoBehaviour
     {
-        playerStats = GetComponent<PlayerStats>();
-    }
-    private void Update()
-    {
-        timer += Time.deltaTime;
-        float attackRate = ownedWeapons[currentWeapon].attackRate * playerStats.AttackSpeedMultiplier;
+        [SerializeField]
+        private WeaponData[] ownedWeapons;
+        private int currentWeapon;
+        [SerializeField] private ProjectilePool projectilePool;
+        [SerializeField] private float attackRadius = 10f;
+        private PlayerStats playerStats;
 
-        if (timer < 1f / attackRate)
-            return;
+        private float timer;
 
-        Enemy target = FindClosestEnemy();
-
-        if (target == null)
-            return;
-
-        Shoot(target);
-
-        timer = 0f;
-    }
-
-    private Enemy FindClosestEnemy()
-    {
-        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-
-        Enemy closest = null;
-        float closestDistance = attackRadius;
-
-        foreach (Enemy enemy in enemies)
+        private void Awake()
         {
-            if (!enemy.gameObject.activeInHierarchy)
-                continue;
+            playerStats = GetComponent<PlayerStats>();
+        }
+        private void Update()
+        {
+            timer += Time.deltaTime;
+            float attackRate = ownedWeapons[currentWeapon].attackRate * playerStats.AttackSpeedMultiplier;
 
-            float distance = Vector2.Distance(transform.position, enemy.transform.position);
+            if (timer < 1f / attackRate)
+                return;
 
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closest = enemy;
-            }
+            Enemy target = FindClosestEnemy();
+
+            if (target == null)
+                return;
+
+            Shoot(target);
+
+            timer = 0f;
         }
 
-        return closest;
-    }
+        private Enemy FindClosestEnemy()
+        {
+            Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
-    private void Shoot(Enemy target)
-    {
-        Projectile projectile = projectilePool.GetProjectile();
+            Enemy closest = null;
+            float closestDistance = attackRadius;
 
-        projectile.transform.position = transform.position;
+            foreach (Enemy enemy in enemies)
+            {
+                if (!enemy.gameObject.activeInHierarchy)
+                    continue;
 
-        Vector2 direction =
-            target.transform.position - transform.position;
+                float distance = Vector2.Distance(transform.position, enemy.transform.position);
 
-        float damage = ownedWeapons[currentWeapon].damage * playerStats.DamageMultiplier;
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = enemy;
+                }
+            }
 
-        projectile.Initialize(ownedWeapons[currentWeapon], direction);
+            return closest;
+        }
+
+        private void Shoot(Enemy target)
+        {
+            Projectile projectile = projectilePool.GetProjectile();
+
+            projectile.transform.position = transform.position;
+
+            Vector2 direction =
+                target.transform.position - transform.position;
+
+            float damage = ownedWeapons[currentWeapon].damage * playerStats.DamageMultiplier;
+
+            projectile.Initialize(ownedWeapons[currentWeapon], direction);
+            AudioManager.Instance.PlayShoot();
+        }
     }
 }

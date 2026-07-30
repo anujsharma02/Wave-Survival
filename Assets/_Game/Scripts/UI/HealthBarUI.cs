@@ -1,23 +1,35 @@
 using UnityEngine;
 using UnityEngine.UI;
+using WaveSurvival.Managers;
 
-public class HealthBarUI : MonoBehaviour
+namespace WaveSurvival.UI
 {
-    [SerializeField]
-    private Slider slider;
-
-    private void OnEnable()
+    /*
+ * Displays the player's current health.
+ *
+ * Responsibilities:
+ * - Updates the health slider.
+ * - Displays current and maximum health.
+ * - Refreshes when the player's health changes.
+ */
+    public class HealthBarUI : MonoBehaviour
     {
-        EventManager.OnHealthChanged += UpdateBar;
-    }
+        [SerializeField]
+        private Slider slider;
 
-    private void OnDisable()
-    {
-        EventManager.OnHealthChanged -= UpdateBar;
-    }
+        private void OnEnable()
+        {
+            EventManager.OnHealthChanged += UpdateBar;
+        }
 
-    private void UpdateBar(float current, float max)
-    {
-        slider.value = current / max;
+        private void OnDisable()
+        {
+            EventManager.OnHealthChanged -= UpdateBar;
+        }
+
+        private void UpdateBar(float current, float max)
+        {
+            slider.value = current / max;
+        }
     }
 }

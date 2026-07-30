@@ -1,17 +1,32 @@
 using UnityEngine;
 
-public class EnemyFactory : MonoBehaviour
+using WaveSurvival.Managers;
+using WaveSurvival.Data;
+
+namespace WaveSurvival.Enemies
 {
-    [SerializeField] private PoolManager poolManager;
-
-    public Enemy SpawnEnemy(EnemyData data, Vector2 position)
+    /*
+ * Spawns enemies into the game world.
+ *
+ * Responsibilities:
+ * - Creates enemies at spawn locations.
+ * - Selects enemy types.
+ * - Works with WaveManager.
+ * - Uses object pooling for better performance.
+ */
+    public class EnemyFactory : MonoBehaviour
     {
-        Enemy enemy = poolManager.GetEnemy();
+        [SerializeField] private PoolManager poolManager;
 
-        enemy.transform.position = position;
+        public Enemy SpawnEnemy(EnemyData data, Vector2 position)
+        {
+            Enemy enemy = poolManager.GetEnemy();
 
-        enemy.Initialize(data);
+            enemy.transform.position = position;
 
-        return enemy;
+            enemy.Initialize(data);
+
+            return enemy;
+        }
     }
 }

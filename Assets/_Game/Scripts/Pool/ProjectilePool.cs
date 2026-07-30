@@ -1,38 +1,42 @@
 using System.Collections.Generic;
 using UnityEngine;
+using WaveSurvival.Weapon;
 
-public class ProjectilePool : MonoBehaviour
+namespace WaveSurvival.Pool
 {
-    [SerializeField] private Projectile projectilePrefab;
-    [SerializeField] private int initialSize = 30;
-
-    private readonly List<Projectile> pool = new();
-
-    private void Awake()
+    public class ProjectilePool : MonoBehaviour
     {
-        for (int i = 0; i < initialSize; i++)
-        {
-            Projectile projectile = Instantiate(projectilePrefab, transform);
-            projectile.gameObject.SetActive(false);
-            pool.Add(projectile);
-        }
-    }
+        [SerializeField] private Projectile projectilePrefab;
+        [SerializeField] private int initialSize = 30;
 
-    public Projectile GetProjectile()
-    {
-        foreach (Projectile projectile in pool)
+        private readonly List<Projectile> pool = new();
+
+        private void Awake()
         {
-            if (!projectile.gameObject.activeInHierarchy)
+            for (int i = 0; i < initialSize; i++)
             {
-                projectile.gameObject.SetActive(true);
-                return projectile;
+                Projectile projectile = Instantiate(projectilePrefab, transform);
+                projectile.gameObject.SetActive(false);
+                pool.Add(projectile);
             }
         }
 
-        Projectile newProjectile = Instantiate(projectilePrefab, transform);
-        newProjectile.gameObject.SetActive(true);
-        pool.Add(newProjectile);
+        public Projectile GetProjectile()
+        {
+            foreach (Projectile projectile in pool)
+            {
+                if (!projectile.gameObject.activeInHierarchy)
+                {
+                    projectile.gameObject.SetActive(true);
+                    return projectile;
+                }
+            }
 
-        return newProjectile;
+            Projectile newProjectile = Instantiate(projectilePrefab, transform);
+            newProjectile.gameObject.SetActive(true);
+            pool.Add(newProjectile);
+
+            return newProjectile;
+        }
     }
 }

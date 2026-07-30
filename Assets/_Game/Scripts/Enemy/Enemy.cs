@@ -1,48 +1,65 @@
 using UnityEngine;
+using WaveSurvival.Data;
+using WaveSurvival.Player;
+using WaveSurvival.XP;
+using WaveSurvival.Managers;
 
-public class Enemy : MonoBehaviour
+namespace WaveSurvival.Enemies
 {
-    [SerializeField] private SpriteRenderer spriteRenderer;
-
-    public EnemyData Data { get; private set; }
-
-    private float currentHealth;
-
-
-    public void Initialize(EnemyData data)
+    /*
+ * Represents a single enemy in the game.
+ *
+ * Responsibilities:
+ * - Stores enemy data and statistics.
+ * - Initializes enemy properties from EnemyData.
+ * - Handles health, damage, and death.
+ * - Drops rewards when defeated.
+ * - Returns itself to the object pool if pooling is used.
+ */
+    public class Enemy : MonoBehaviour
     {
-        Data = data;
-        currentHealth = data.maxHealth;
+        [SerializeField] private SpriteRenderer spriteRenderer;
 
-        spriteRenderer.color = data.enemyColor;
-    }
+        public EnemyData Data { get; private set; }
 
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
+        private float currentHealth;
 
-        if (currentHealth <= 0)
+
+        public void Initialize(EnemyData data)
         {
-            Die();
+            Data = data;
+            currentHealth = data.maxHealth;
+
+            spriteRenderer.sprite = data.enemySprite;
         }
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        PlayerHealth player = collision.gameObject.GetComponent<PlayerHealth>();
+        public void TakeDamage(float damage)
+        {
+            currentHealth -= damage;
 
-        if (player == null)
-            return;
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
+        }
 
-        player.TakeDamage(Data.damage);
-    }
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            PlayerHealth player = collision.gameObject.GetComponent<PlayerHealth>();
 
-    private void Die()
-    {
-        XPOrb orb = GameManager.Instance.XPPool.GetXP();
+            if (player == null)
+                return;
 
-        orb.transform.position = transform.position;
+            player.TakeDamage(Data.damage);
+        }
 
-        gameObject.SetActive(false);
+        private void Die()
+        {
+            XPOrb orb = GameManager.Instance.XPPool.GetXP();
+
+            orb.transform.position = transform.position;
+
+            gameObject.SetActive(false);
+        }
     }
 }

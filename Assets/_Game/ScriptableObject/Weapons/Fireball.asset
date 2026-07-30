@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   weaponName: Fireball
-  damage: 5
-  attackRate: 1
+  damage: 10
+  attackRate: 0.5
   projectileSpeed: 7
-  range: 8
-  projectileColor: {r: 0.8207547, g: 0.48892885, b: 0.375534, a: 1}
+  range: 10
+  projectileSprite: {fileID: -6607481912129624618, guid: 58c6d471bc9897a4a94d9d1c53386225, type: 3}

@@ -15,6 +15,6 @@ MonoBehaviour:
   enemyName: Zombie
   moveSpeed: 2
   maxHealth: 15
-  damage: 5
+  damage: 6
   xpReward: 5
-  enemyColor: {r: 0.14631534, g: 1, b: 0, a: 1}
+  enemySprite: {fileID: -4173304096046650208, guid: a543bc812ce1e344bbf0d4add3434ea5, type: 3}

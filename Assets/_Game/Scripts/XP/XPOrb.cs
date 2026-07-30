@@ -1,18 +1,21 @@
 using UnityEngine;
 
-public class XPOrb : MonoBehaviour
+namespace WaveSurvival.XP
 {
-    [SerializeField] private float xpAmount = 5;
-
-    private void OnTriggerEnter2D(Collider2D other)
+    public class XPOrb : MonoBehaviour
     {
-        LevelSystem level = other.GetComponent<LevelSystem>();
+        [SerializeField] private float xpAmount = 5;
 
-        if (level == null)
-            return;
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            LevelSystem level = other.GetComponent<LevelSystem>();
 
-        level.AddXP(xpAmount);
+            if (level == null)
+                return;
 
-        gameObject.SetActive(false);
+            level.AddXP(xpAmount);
+
+            gameObject.SetActive(false);
+        }
     }
 }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BatData
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Bat
-  moveSpeed: 4
-  maxHealth: 10
+  moveSpeed: 3
+  maxHealth: 8
   damage: 3
   xpReward: 8
-  enemyColor: {r: 0.92321587, g: 0, b: 1, a: 1}
+  enemySprite: {fileID: 5867836553984952317, guid: 7f50052e2e92749489ff0e013587b9cc, type: 3}

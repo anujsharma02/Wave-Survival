@@ -1,30 +1,45 @@
 using UnityEngine;
+using TMPro;
 
-public class UpgradeManager : MonoBehaviour
+namespace WaveSurvival.Managers
 {
-    [SerializeField] private GameObject upgradePanel;
-
-    private void OnEnable()
+    /*
+ * Controls player upgrade system.
+ *
+ * Responsibilities:
+ * - Shows upgrade choices.
+ * - Applies selected upgrades.
+ * - Improves player abilities.
+ * - Manages upgrade progression.
+ */
+    public class UpgradeManager : MonoBehaviour
     {
-        EventManager.OnLevelChanged += OpenUpgradePanel;
-    }
+        [SerializeField] private GameObject upgradePanel;
+        [SerializeField] private TMP_Text levelText;
 
-    private void OnDisable()
-    {
-        EventManager.OnLevelChanged -= OpenUpgradePanel;
-    }
+        private void OnEnable()
+        {
+            EventManager.OnLevelChanged += OpenUpgradePanel;
+        }
 
-    private void OpenUpgradePanel(int level)
-    {
-        Time.timeScale = 0f;
+        private void OnDisable()
+        {
+            EventManager.OnLevelChanged -= OpenUpgradePanel;
+        }
 
-        upgradePanel.SetActive(true);
-    }
+        private void OpenUpgradePanel(int level)
+        {
+            Time.timeScale = 0f;
 
-    public void ClosePanel()
-    {
-        upgradePanel.SetActive(false);
+            upgradePanel.SetActive(true);
+        }
 
-        Time.timeScale = 1f;
+        public void ClosePanel()
+        {
+            levelText.text = "Level: " + GameManager.Instance.LevelSystem.Level;
+            upgradePanel.SetActive(false);
+
+            Time.timeScale = 1f;
+        }
     }
 }

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f0d5ac46df15e47a5018cb44db5988, type: 3}
   m_Name: Wave3
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
-  waveDuration: 60
-  spawnInterval: 1
+  waveDuration: 45
+  spawnInterval: 1.5
   enemies:
+  - {fileID: 11400000, guid: 29e4b374637b7674ab43490ab3ed06ad, type: 2}
   - {fileID: 11400000, guid: 27bb8dc395b363c409496147f2c639c2, type: 2}
   - {fileID: 11400000, guid: 92a93756495d95e4ba3f30bc9b238b3e, type: 2}
-  - {fileID: 11400000, guid: 29e4b374637b7674ab43490ab3ed06ad, type: 2}

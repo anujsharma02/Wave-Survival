@@ -1,57 +1,63 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WaveSurvival.Managers;
+using WaveSurvival.Data;
+using WaveSurvival.Player;
 
-public class UpgradeButton : MonoBehaviour
+namespace WaveSurvival.UI
 {
-    [SerializeField] private TMP_Text title;
-
-    private UpgradeData data;
-
-    private UpgradeManager manager;
-
-    public void Setup(UpgradeData upgrade, UpgradeManager upgradeManager)
+    public class UpgradeButton : MonoBehaviour
     {
-        data = upgrade;
-        manager = upgradeManager;
+        [SerializeField] private TMP_Text title;
 
-        title.text = upgrade.upgradeName;
-    }
+        private UpgradeData data;
 
-    public void SelectUpgrade()
-    {
-        ApplyUpgrade();
+        private UpgradeManager manager;
 
-        manager.ClosePanel();
-    }
-
-    private void ApplyUpgrade()
-    {
-        PlayerStats stats = GameManager.Instance.PlayerStats;
-
-        if (stats == null)
+        public void Setup(UpgradeData upgrade, UpgradeManager upgradeManager)
         {
-            Debug.LogError("PlayerStats not found in GameManager.");
-            return;
+            data = upgrade;
+            manager = upgradeManager;
+
+            title.text = upgrade.upgradeName;
         }
 
-        switch (data.upgradeType)
+        public void SelectUpgrade()
         {
-            case UpgradeType.Damage:
-                stats.DamageMultiplier += data.value;
-                break;
+            ApplyUpgrade();
 
-            case UpgradeType.AttackSpeed:
-                stats.AttackSpeedMultiplier += data.value;
-                break;
+            manager.ClosePanel();
+        }
 
-            case UpgradeType.MoveSpeed:
-                stats.MoveSpeedMultiplier += data.value;
-                break;
+        private void ApplyUpgrade()
+        {
+            PlayerStats stats = GameManager.Instance.PlayerStats;
 
-            case UpgradeType.MaxHealth:
-                stats.MaxHealth += (int)data.value;
-                break;
+            if (stats == null)
+            {
+                Debug.LogError("PlayerStats not found in GameManager.");
+                return;
+            }
+
+            switch (data.upgradeType)
+            {
+                case UpgradeType.Damage:
+                    stats.DamageMultiplier += data.value;
+                    break;
+
+                case UpgradeType.AttackSpeed:
+                    stats.AttackSpeedMultiplier += data.value;
+                    break;
+
+                case UpgradeType.MoveSpeed:
+                    stats.MoveSpeedMultiplier += data.value;
+                    break;
+
+                case UpgradeType.MaxHealth:
+                    stats.MaxHealth += (int)data.value;
+                    break;
+            }
         }
     }
 }

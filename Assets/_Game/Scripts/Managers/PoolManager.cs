@@ -1,38 +1,51 @@
 using UnityEngine;
+using WaveSurvival.Enemies;
 
-public class PoolManager : MonoBehaviour
+namespace WaveSurvival.Managers
 {
-    [SerializeField]
-    private Enemy prefab;
-    [SerializeField] private int initialPoolSize = 20;
-
-    private readonly System.Collections.Generic.List<Enemy> pool = new();
-
-    private void Awake()
+    /*
+ * Manages object pooling.
+ *
+ * Responsibilities:
+ * - Creates reusable objects.
+ * - Spawns pooled objects.
+ * - Returns objects back to the pool.
+ * - Reduces Instantiate/Destroy calls.
+ */
+    public class PoolManager : MonoBehaviour
     {
-        for (int i = 0; i < initialPoolSize; i++)
-        {
-            Enemy enemy = Instantiate(prefab, transform);
-            enemy.gameObject.SetActive(false);
-            pool.Add(enemy);
-        }
-    }
+        [SerializeField]
+        private Enemy prefab;
+        [SerializeField] private int initialPoolSize = 20;
 
-    public Enemy GetEnemy()
-    {
-        foreach (Enemy enemy in pool)
+        private readonly System.Collections.Generic.List<Enemy> pool = new();
+
+        private void Awake()
         {
-            if (!enemy.gameObject.activeInHierarchy)
+            for (int i = 0; i < initialPoolSize; i++)
             {
-                enemy.gameObject.SetActive(true);
-                return enemy;
+                Enemy enemy = Instantiate(prefab, transform);
+                enemy.gameObject.SetActive(false);
+                pool.Add(enemy);
             }
         }
 
-        Enemy newEnemy = Instantiate(prefab, transform);
-        newEnemy.gameObject.SetActive(true);
-        pool.Add(newEnemy);
+        public Enemy GetEnemy()
+        {
+            foreach (Enemy enemy in pool)
+            {
+                if (!enemy.gameObject.activeInHierarchy)
+                {
+                    enemy.gameObject.SetActive(true);
+                    return enemy;
+                }
+            }
 
-        return newEnemy;
+            Enemy newEnemy = Instantiate(prefab, transform);
+            newEnemy.gameObject.SetActive(true);
+            pool.Add(newEnemy);
+
+            return newEnemy;
+        }
     }
 }

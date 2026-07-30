@@ -1,63 +1,130 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
+using WaveSurvival.Core;
+using WaveSurvival.Managers;
 
-public class PauseMenuUI : MonoBehaviour
+namespace WaveSurvival.UI
 {
-    [SerializeField]
-    private GameObject pausePanel;
-
-    [SerializeField]
-    private Button resumeButton;
-    [SerializeField]
-    private Button restartButton;
-
-    [SerializeField]
-    private Button quitButton;
-
-    [SerializeField]
-    private Button pauseButton;
-
-    private void Awake()
+    /*
+ * Controls the game's pause system.
+ *
+ * Responsibilities:
+ * - Pauses and resumes gameplay.
+ * - Shows pause menu.
+ * - Returns to the main menu.
+ */
+    public class PauseMenuUI : Singleton<PauseMenuUI>
     {
+        [SerializeField]
+        private GameObject pausePanel;
 
-        resumeButton.onClick.AddListener(Resume);
-        restartButton.onClick.AddListener(Restart);
-        quitButton.onClick.AddListener(QuitGame);
-        pauseButton.onClick.AddListener(TogglePause);
+        [Header("Texts")]
+        [SerializeField] private TMP_Text titleText;
+        [SerializeField] private TMP_Text messageText;
+        [SerializeField] private TMP_Text BestRecord;
 
-        pausePanel.SetActive(false);
-    }
+        [Header("Buttons")]
+        [SerializeField] private Button resumeButton;
+        [SerializeField] private Button restartButton;
 
-    public void TogglePause()
-    {
-        bool isPaused = !pausePanel.activeSelf;
+        [SerializeField] private Button quitButton;
 
-        pausePanel.SetActive(isPaused);
+        [SerializeField] private Button pauseButton;
 
-        Time.timeScale = isPaused ? 0f : 1f;
-    }
+        protected override void Awake()
+        {
+            base.Awake();
 
-    public void Resume()
-    {
-        pausePanel.SetActive(false);
+            InitializeEvent();
+            pausePanel.SetActive(false);
+            titleText.text = "PAUSED";
+            messageText.text = "";
+        }
+	private void Start(){
+ BestRecord.text =
+    $"Best Level : {SaveManager.GetBestLevel()}\n" +
+    $"Best Time : {FormatTime(SaveManager.GetBestTime())}";
 
-        Time.timeScale = 1;
-    }
+	}
+        private void InitializeEvent()
+        {
+            resumeButton.onClick.AddListener(Resume);
+            restartButton.onClick.AddListener(Restart);
+            quitButton.onClick.AddListener(QuitGame);
+            pauseButton.onClick.AddListener(TogglePause);
+        }
 
-    public void Restart()
-    {
-        Time.timeScale = 1;
+        public void TogglePause()
+        {
+            AudioManager.Instance.PlayButton();
+            bool isPaused = !pausePanel.activeSelf;
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+            pausePanel.SetActive(isPaused);
 
-    public void QuitGame()
-    {
+            Time.timeScale = isPaused ? 0f : 1f;
+            titleText.text = "PAUSED";
+            messageText.text = "";
+            resumeButton.gameObject.SetActive(true);
+        }
+
+        public void Resume()
+        {
+            AudioManager.Instance.PlayButton();
+            pausePanel.SetActive(false);
+
+            Time.timeScale = 1;
+        }
+
+        public void Restart()
+        {
+            AudioManager.Instance.PlayButton();
+            Time.timeScale = 1;
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        public void ShowGameOver(float survivalTime, int level)
+        {
+            AudioManager.Instance.PlayGameOver();
+
+            pausePanel.SetActive(true);
+
+            Time.timeScale = 0f;
+
+            titleText.text = "GAME OVER";
+
+            messageText.text =
+                $"You Survived for {FormatTime(survivalTime)}\n" +
+                $"Level Reached : {level}";
+
+            resumeButton.gameObject.SetActive(false);
+
+            restartButton.gameObject.SetActive(true);
+            quitButton.gameObject.SetActive(true);
+            pauseButton.gameObject.SetActive(false);
+	    BestRecord.text =
+    $"Best Level : {SaveManager.GetBestLevel()}\n" +
+    $"Best Time : {FormatTime(SaveManager.GetBestTime())}";
+        }
+
+        private string FormatTime(float seconds)
+        {
+            int min = Mathf.FloorToInt(seconds / 60);
+            int sec = Mathf.FloorToInt(seconds % 60);
+
+            return $"{min:00}:{sec:00}";
+        }
+
+        public void QuitGame()
+        {
+            AudioManager.Instance.PlayButton();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.Quit();
+            Application.Quit();
 #endif
+        }
+
     }
 }

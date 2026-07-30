@@ -1,24 +1,27 @@
 using UnityEngine;
 
-public enum UpgradeType
+namespace WaveSurvival.Data
 {
-    Damage,
-    AttackSpeed,
-    MoveSpeed,
-    MaxHealth,
-    UnlockArrow,
-    UnlockLightning
-}
+    public enum UpgradeType
+    {
+        Damage,
+        AttackSpeed,
+        MoveSpeed,
+        MaxHealth,
+        UnlockArrow,
+        UnlockLightning
+    }
 
-[CreateAssetMenu(fileName = "UpgradeData", menuName = "Wave Survival/Upgrade Data")]
-public class UpgradeData : ScriptableObject
-{
-    public string upgradeName;
+    [CreateAssetMenu(fileName = "UpgradeData", menuName = "Wave Survival/Upgrade Data")]
+    public class UpgradeData : ScriptableObject
+    {
+        public string upgradeName;
 
-    [TextArea]
-    public string description;
+        [TextArea]
+        public string description;
 
-    public UpgradeType upgradeType;
+        public UpgradeType upgradeType;
 
-    public float value;
+        public float value;
+    }
 }

@@ -1,36 +1,52 @@
 using UnityEngine;
+using WaveSurvival.Managers;
+using WaveSurvival.UI;
 
-public class PlayerHealth : MonoBehaviour
+namespace WaveSurvival.Player
 {
-    [SerializeField]
-    private float maxHealth = 100;
-
-    private float currentHealth;
-
-    private void Start()
+    /*
+ * Handles the player's health system.
+ *
+ * Responsibilities:
+ * - Stores current and maximum health.
+ * - Applies damage and healing.
+ * - Detects player death.
+ * - Notifies other systems when health changes.
+ */
+    public class PlayerHealth : MonoBehaviour
     {
-        currentHealth = maxHealth;
+        [SerializeField]
+        private float maxHealth = 100;
 
-        EventManager.OnHealthChanged?.Invoke(currentHealth, maxHealth);
-    }
+        private float currentHealth;
 
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-
-        currentHealth = Mathf.Max(currentHealth, 0);
-
-        EventManager.OnHealthChanged?.Invoke(currentHealth, maxHealth);
-
-        if (currentHealth <= 0)
+        private void Start()
         {
-            GameOver();
-        }
-    }
+            currentHealth = maxHealth;
 
-    private void GameOver()
-    {
-        Debug.Log("GAME OVER");
-        Time.timeScale = 0;
+            EventManager.OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            currentHealth -= damage;
+
+            currentHealth = Mathf.Max(currentHealth, 0);
+
+            EventManager.OnHealthChanged?.Invoke(currentHealth, maxHealth);
+
+            if (currentHealth <= 0)
+            {
+                GameOver();
+            }
+        }
+
+        private void GameOver()
+        {
+            float survivalTime = GameManager.Instance.GameTime;
+            int level = GameManager.Instance.LevelSystem.Level;
+            SaveManager.SaveGame(level, survivalTime);
+            PauseMenuUI.Instance.ShowGameOver(survivalTime, level);
+        }
     }
 }

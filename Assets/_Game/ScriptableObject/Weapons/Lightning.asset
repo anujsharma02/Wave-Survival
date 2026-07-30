@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   weaponName: Lightning
   damage: 15
-  attackRate: 0.5
+  attackRate: 0.8
   projectileSpeed: 15
-  range: 12
-  projectileColor: {r: 1, g: 0.4117647, b: 0.7058824, a: 1}
+  range: 15
+  projectileSprite: {fileID: -894095381526335850, guid: ffcf962725d13094b8b9b1d9a942d433, type: 3}

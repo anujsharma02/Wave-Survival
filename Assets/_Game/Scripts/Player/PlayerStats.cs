@@ -1,12 +1,15 @@
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+namespace WaveSurvival.Player
 {
-    public float DamageMultiplier = 1f;
+    public class PlayerStats : MonoBehaviour
+    {
+        public float DamageMultiplier = 1f;
 
-    public float AttackSpeedMultiplier = 1f;
+        public float AttackSpeedMultiplier = 1f;
 
-    public float MoveSpeedMultiplier = 1f;
+        public float MoveSpeedMultiplier = 1f;
 
-    public int MaxHealth = 100;
+        public int MaxHealth = 100;
+    }
 }

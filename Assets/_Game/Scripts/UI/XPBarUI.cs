@@ -1,23 +1,36 @@
 using UnityEngine;
 using UnityEngine.UI;
+using WaveSurvival.Managers;
 
-public class XPBarUI : MonoBehaviour
+namespace WaveSurvival.UI
 {
-    [SerializeField]
-    private Slider slider;
-
-    private void OnEnable()
+    /*
+ * Displays the player's experience progress.
+ *
+ * Responsibilities:
+ * - Updates the experience bar.
+ * - Shows current XP progress.
+ * - Refreshes after collecting XP.
+ * - Resets after leveling up.
+ */
+    public class XPBarUI : MonoBehaviour
     {
-        EventManager.OnXPChanged += UpdateXP;
-    }
+        [SerializeField]
+        private Slider slider;
 
-    private void OnDisable()
-    {
-        EventManager.OnXPChanged -= UpdateXP;
-    }
+        private void OnEnable()
+        {
+            EventManager.OnXPChanged += UpdateXP;
+        }
 
-    private void UpdateXP(float current, float max)
-    {
-        slider.value = current / max;
+        private void OnDisable()
+        {
+            EventManager.OnXPChanged -= UpdateXP;
+        }
+
+        private void UpdateXP(float current, float max)
+        {
+            slider.value = current / max;
+        }
     }
 }

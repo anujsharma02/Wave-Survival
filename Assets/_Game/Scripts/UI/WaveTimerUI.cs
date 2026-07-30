@@ -1,23 +1,33 @@
 using TMPro;
 using UnityEngine;
+using WaveSurvival.Managers;
 
-public class WaveTimerUI : MonoBehaviour
+namespace WaveSurvival.UI
 {
-    [SerializeField]
-    private TMP_Text timerText;
-
-    private void OnEnable()
+    /*
+ * Displays current wave information.
+ *
+ * Responsibilities:
+ * - Shows countdown before the next wave.
+ */
+    public class WaveTimerUI : MonoBehaviour
     {
-        EventManager.OnWaveTimerChanged += UpdateTimer;
-    }
+        [SerializeField]
+        private TMP_Text timerText;
 
-    private void OnDisable()
-    {
-        EventManager.OnWaveTimerChanged -= UpdateTimer;
-    }
+        private void OnEnable()
+        {
+            EventManager.OnWaveTimerChanged += UpdateTimer;
+        }
 
-    private void UpdateTimer(float seconds)
-    {
-        timerText.text = Mathf.CeilToInt(seconds).ToString();
+        private void OnDisable()
+        {
+            EventManager.OnWaveTimerChanged -= UpdateTimer;
+        }
+
+        private void UpdateTimer(float seconds)
+        {
+            timerText.text = "Wave Timer: " + Mathf.CeilToInt(seconds).ToString();
+        }
     }
 }

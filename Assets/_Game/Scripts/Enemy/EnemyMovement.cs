@@ -1,24 +1,44 @@
 using UnityEngine;
+using WaveSurvival.Core;
+using WaveSurvival.Managers;
 
-public class EnemyMovement : MonoBehaviour
+namespace WaveSurvival.Enemies
 {
-    private Enemy enemy;
-
-    private void Awake()
+    /*
+ * Controls enemy movement and chasing behavior.
+ *
+ * Responsibilities:
+ * - Finds the player's position.
+ * - Moves towards the player.
+ * - Updates movement every frame.
+ * - Uses movement speed from EnemyData.
+ */
+    public class EnemyMovement : MonoBehaviour
     {
-        enemy = GetComponent<Enemy>();
-    }
+        private Enemy enemy;
 
-    private void Update()
-    {
-        if (GameManager.Instance == null)
-            return;
+        private void Awake()
+        {
+            enemy = GetComponent<Enemy>();
+        }
 
-        Transform player = GameManager.Instance.PlayerTransform;
+        private void Update()
+        {
+            if (GameManager.Instance == null)
+                return;
 
-        transform.position = Vector2.MoveTowards(
-            transform.position,
-            player.position,
-            enemy.Data.moveSpeed * Time.deltaTime);
+            Transform player = GameManager.Instance.PlayerTransform;
+
+            //     transform.position = Vector2.MoveTowards(
+            //         transform.position,
+            //         player.position,
+            //         enemy.Data.moveSpeed * Time.deltaTime);
+
+            Vector3 nextPosition = Vector2.MoveTowards(
+            transform.position, player.position, enemy.Data.moveSpeed * Time.deltaTime);
+
+            transform.position =
+                WorldBounds.Instance.ClampPosition(nextPosition);
+        }
     }
 }
